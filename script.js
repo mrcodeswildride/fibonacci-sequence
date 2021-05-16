@@ -1,6 +1,6 @@
 let number = document.getElementById(`number`)
 let fibButton = document.getElementById(`fibButton`)
-let box = document.getElementById(`box`)
+let table = document.getElementById(`table`)
 
 fibButton.addEventListener(`click`, calculateSequence)
 
@@ -10,39 +10,28 @@ number.focus()
 function calculateSequence() {
   let numberValue = number.value.trim()
 
-  if (numberValue != `` && !isNaN(numberValue)) {
-    if (numberValue < 0 || numberValue > 100) {
-      box.innerHTML = `Nth term must be between 0 and 100.`
+  if (numberValue < 0 || numberValue > 100) {
+    table.innerHTML = `Nth term must be between 0 and 100.`
+  } else {
+    let fib = [0, 1]
+
+    for (let i = 2; i <= numberValue; i++) {
+      fib[i] = fib[i - 1] + fib[i - 2]
     }
-    else {
-      let fib = [0, 1]
 
-      for (let i = 2; i <= numberValue; i++) {
-        fib[i] = fib[i-1] + fib[i-2]
-      }
+    table.innerHTML = ``
+    makeRow(`Nth Term`, `<strong>Fibonacci Number</strong>`)
 
-      box.innerHTML = ``
-      createRow(`Nth Term`, `<strong>Fibonacci Number</strong>`)
-
-      for (let i = 0; i <= numberValue; i++) {
-        createRow(i, fib[i])
-      }
+    for (let i = 0; i <= numberValue; i++) {
+      makeRow(i, fib[i])
     }
-  }
-
-  number.focus()
-}
-
-function keyPressed(event) {
-  if (event.keyCode == 13) {
-    calculateSequence()
   }
 }
 
-function createRow(key, value) {
+function makeRow(key, value) {
   let row = document.createElement(`div`)
   row.classList.add(`row`)
-  box.appendChild(row)
+  table.appendChild(row)
 
   let keyDiv = document.createElement(`div`)
   keyDiv.classList.add(`key`)
@@ -53,4 +42,10 @@ function createRow(key, value) {
   valueDiv.classList.add(`value`)
   valueDiv.innerHTML = value
   row.appendChild(valueDiv)
+}
+
+function keyPressed(event) {
+  if (event.keyCode == 13) {
+    calculateSequence()
+  }
 }
